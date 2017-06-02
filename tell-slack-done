@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+statusCode=$(post-to-slack -t "👌" -u "https://hooks.slack.com/services/<...>")
+
+if [[ ${statusCode} == "200" ]]; then
+    echo "posted successfully"
+else
+    echo "error"
+fi
