@@ -2,24 +2,18 @@
 
 function usage {
     programName=$0
-    echo "description: use this program to post messages to Slack channel"
-    echo "usage: $programName [-t \"sample title\"] [-b \"message body\"] [-c \"mychannel\"] [-u \"slack url\"]"
-    echo "	-t    the title of the message you are posting"
-    echo "	-b    The message body"
-    echo "	-c    The channel you are posting to"
-    echo "	-u    The slack hook url to post to"
+    echo "description: use this program to post messages to Slack by Incoming Webhooks"
+    echo "usage: $programName [-t \"text\"] [-u \"slack url\"]"
+    echo "  -t    the message text you are posting"
+    echo "  -u    The slack hook url to post to"
     exit 1
 }
 
-while getopts ":t:b:c:u:h" opt; do
+while getopts ":t:u:h" opt; do
   case ${opt} in
-    t) msgTitle="$OPTARG"
+    t) msgText="$OPTARG"
     ;;
     u) slackUrl="$OPTARG"
-    ;;
-    b) msgBody="$OPTARG"
-    ;;
-    c) channelName="$OPTARG"
     ;;
     h) usage
     ;;
@@ -28,29 +22,15 @@ while getopts ":t:b:c:u:h" opt; do
   esac
 done
 
-if [[ ! "${msgTitle}" ||  ! "${slackUrl}" || ! "${msgBody}" || ! "${channelName}" ]]; then
+if [[ ! "${msgText}" || ! "${slackUrl}" ]]; then
     echo "all arguments are required"
     usage
 fi
 
 read -d '' payLoad << EOF
 {
-        "channel": "#${channelName}",
-        "username": "$(hostname)",
-        "icon_emoji": ":sunglasses:",
-        "attachments": [
-            {
-                "fallback": "${msgTitle}",
-                "color": "good",
-                "title": "${msgTitle}",
-                "fields": [{
-                    "title": "message",
-                    "value": "${msgBody}",
-                    "short": false
-                }]
-            }
-        ]
-    }
+    "text": "${msgText}",
+}
 EOF
 
 
