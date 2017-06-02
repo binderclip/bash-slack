@@ -1,5 +1,9 @@
 # Post messages to slack from Bash
 
+## Usage
+
+https://github.com/binderclip/bash-slack/wiki
+
 ## TODO
 
 - 添加 `tell-slack` 脚本方便使用
